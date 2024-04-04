@@ -1,30 +1,32 @@
+import debounce from "./debounce.js";
+
 export default class ScrollAnima {
   constructor(sections) {
     this.sections = document.querySelectorAll(sections);
     this.windowMetade = window.innerHeight * 0.6;
 
-    this.checkDistance = this.checkDistance.bind(this);
+    this.checkDistance = debounce(this.checkDistance.bind(this), 50);
   }
 
-  // pega a distancia decada item em relação 
+  // pega a distancia decada item em relação
   // ao topo do site
-  getDistance(){
+  getDistance() {
     this.distance = [...this.sections].map((section) => {
       const offset = section.offsetTop;
-      return{
+      return {
         element: section,
         offset: Math.floor(offset - this.windowMetade),
       };
     });
   }
-  
+
   // verifica a distância em cada objeto
   // em relação ao scroll do site
-  checkDistance(){
+  checkDistance() {
     this.distance.forEach((item) => {
-      if (window.scrollY > item.offset){
+      if (window.scrollY > item.offset) {
         item.element.classList.add("ativo");
-      } else if(item.element.classList.contains('ativo')) {
+      } else if (item.element.classList.contains("ativo")) {
         item.element.classList.remove("ativo");
       }
     });
@@ -40,8 +42,7 @@ export default class ScrollAnima {
   }
 
   // remove o eventListener de scroll
-  stop(){
+  stop() {
     window.removeEventListener("scroll", this.checkDistance);
   }
 }
-
